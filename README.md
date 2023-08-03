@@ -27,15 +27,14 @@ using [Docker] containers from [Docker Hub](https://hub.docker.com/u/islandora)
 that were created by [isle-buildkit](https://github.com/Islandora-Devops/isle-buildkit).
 
 In a nutshell, `isle-dc` generates a docker-compose.yml file for you based on configuration
-that you supply in a `.env` file.  And there are three use cases we're trying to accomplish:
+that you supply in a `.env` file.  There are two primary use cases:
 
-- **demo** *(Example site for kicking the tires and looking at Islandora)*
-- **local** *(Local development using composer/drush in the codebase folder)*
-- **custom** *(A custom Dockerfile to deploy created from local)*
+- **starter** *(Example site for kicking the tires and local development)*
+- **local** *(Site based of an existing Drupal configuration)*
+- **custom** *(A custom Dockerfile to deploy a container created from starter)*
 
-Additionally, there's a couple other targets derived from `local` which make use of [the `islandora/islandora-starter-site` project](https://github.com/Islandora/islandora-starter-site):
+Additionally, there's another option derived from `starter` which allows for development of [the `islandora/islandora-starter-site` project](https://github.com/Islandora/islandora-starter-site):
 
-- **starter**: Uses `composer create-project` to initialize the site, for general use; and,
 - **starter_dev**: Creates a clone of the starter site project, intended for development of the "starter site" proper; however, given a number of different items are configured during provisioning, `starter_dev` may be of limited utility as config exports will be dirtied during provisioning (ideally, these bits that vary could be reworked to use [Drupal's "state API"](https://www.drupal.org/docs/8/api/state-api/overview) instead, or perhaps avoiding reworking of the modules by using [Drupal's configuration override system](https://www.drupal.org/docs/drupal-apis/configuration-api/configuration-override-system)).
 
 On top of that, there's a lot of useful commands for managing an Islandora instance, such
@@ -58,13 +57,13 @@ See release notes at https://docs.docker.com/compose/cli-command/.
 
 ## Getting Started
 
-To get started with a **demo** environment, run:
+To get started with a **starter** environment, run:
 
 ```bash
-make demo
+make starter
 ```
 
-⚠️ If prompted during `make up\demo\local\clean` for password, use your computer's password. The build process may need elevated privileges to write or remove files. For other password information see [Secrets](#secrets)
+⚠️ If prompted for password, use your computer's password. The build process may need elevated privileges to write or remove files. For other password information see [Secrets](#secrets)
 
 This will pull down images from Dockerhub and generate
 
@@ -126,7 +125,7 @@ make clean
 
 ## Local Development
 
-When developing locally, your Drupal site resides in the `codebase` folder and is bind-mounted into your
+When developing locally using `starter` or `local`, your Drupal site resides in the `codebase` folder and is bind-mounted into your
 Drupal container.  This lets you update code using the IDE of your choice on your host machine, and the
 changes are automatically reflected on the Drupal container.  Simply place any exported Drupal site as
 the `codebase` folder in `isle-dc` and you're good to go.
